@@ -69,20 +69,15 @@ LANGUAGE_CODES = {
 
 
 def load_translator():
-    """Load Facebook NLLB translation model from HuggingFace."""
+    """Load Facebook NLLB translation model directly (no pipeline)."""
     try:
-        import torch
-        from transformers import AutoTokenizer, AutoModelForSeq2SeqLM, pipeline
-
+        from transformers import AutoTokenizer, AutoModelForSeq2SeqLM
         logging.info("Loading NLLB translation model...")
         model_name = "facebook/nllb-200-distilled-600M"
         tokenizer = AutoTokenizer.from_pretrained(model_name)
         model = AutoModelForSeq2SeqLM.from_pretrained(model_name)
-
-        device = 0 if torch.cuda.is_available() else -1
-        translator = pipeline("translation", model=model, tokenizer=tokenizer, device=device)
         logging.info("NLLB model loaded.")
-        return translator
+        return tokenizer, model
     except Exception as e:
         logging.error(f"Failed to load translator: {e}")
         raise
@@ -90,22 +85,22 @@ def load_translator():
 
 def translate_text(translator, text: str, src_lang: str, tgt_lang: str,
                    max_length=200) -> str:
-    """Translate text from source to target language."""
+    """Translate text using tokenizer+model directly."""
     try:
-        logging.info(f"Translating from {src_lang} to {tgt_lang}...")
-        result = translator(
-            text,
-            src_lang=src_lang,
-            tgt_lang=tgt_lang,
+        tokenizer, model = translator  # unpack the tuple
+        inputs = tokenizer(text, return_tensors="pt")
+        target_lang_id = tokenizer.convert_tokens_to_ids(tgt_lang)
+        translated = model.generate(
+            **inputs,
+            forced_bos_token_id=target_lang_id,
             max_length=max_length
         )
-        translation = result[0]["translation_text"]
+        result = tokenizer.decode(translated[0], skip_special_tokens=True)
         logging.info("Translation complete.")
-        return translation
+        return result
     except Exception as e:
         logging.error(f"Translation failed: {e}")
         raise
-
 
 def translate_batch(translator, samples: list, src_lang: str, tgt_lang: str) -> list:
     """Translate a batch of sentences. Each sample is a dict with 'src' and 'ref'."""
