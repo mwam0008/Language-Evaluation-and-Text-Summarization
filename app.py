@@ -131,8 +131,8 @@ if section == "How Transformers Work":
 # ════════════════════════════════════════════════════════════
 # SECTION 2 - Text Summarization
 # ════════════════════════════════════════════════════════════
-elif section == "Text Summarization":
-    st.header("Text Summarization")
+elif section == "Text Summarization (BART)":
+    st.header("Text Summarization - BART Model")
     st.markdown("""
     **BART** (Bidirectional and Auto-Regressive Transformer) reads your full text and writes a shorter summary.
     It was fine-tuned on CNN/Daily Mail news articles.
@@ -190,8 +190,8 @@ elif section == "Text Summarization":
 # ════════════════════════════════════════════════════════════
 # SECTION 3 - Language Translation
 # ════════════════════════════════════════════════════════════
-elif section == "Language Translation":
-    st.header("Language Translation")
+elif section == "Language Translation (NLLB)":
+    st.header("Language Translation — Facebook NLLB-200")
     st.markdown("""
     **NLLB-200** (No Language Left Behind) translates between **200 languages**.
     Built by Meta/Facebook AI.
@@ -212,7 +212,7 @@ elif section == "Language Translation":
         elif src_lang == tgt_lang:
             st.warning("Source and target languages must be different!")
         else:
-            with st.spinner("Loading NLLB model and translating... (first run may take ~2 min to download) ⏳"):
+            with st.spinner("Loading NLLB model and translating... (first run may take ~2 min to download)"):
                 try:
                     translator = load_translator()
                     translation = translate_text(translator, user_text, src_lang, tgt_lang)
