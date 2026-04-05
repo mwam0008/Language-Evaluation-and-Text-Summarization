@@ -32,13 +32,13 @@ st.set_page_config(
 )
 
 st.title("Transformer-Based NLP Apps")
-st.markdown("**Text Summarization** with BART and **Language Translation** with NLLB — powered by HuggingFace Transformers.")
+st.markdown("**Text Summarization** with BART and **Language Translation** with NLLB - powered by HuggingFace Transformers.")
 
 # ── Sidebar ───────────────────────────────────────────────────
 st.sidebar.title("Navigation")
 section = st.sidebar.radio("Choose an app:", [
     "How Transformers Work",
-    "Text Summarization (BART)",
+    "Text Summarization",
     "Language Translation (NLLB)",
     "BLEU Score Evaluator",
 ])
@@ -131,8 +131,8 @@ if section == "How Transformers Work":
 # ════════════════════════════════════════════════════════════
 # SECTION 2 - Text Summarization
 # ════════════════════════════════════════════════════════════
-elif section == "Text Summarization (BART)":
-    st.header("Text Summarization - BART Model")
+elif section == "Text Summarization":
+    st.header("Text Summarization")
     st.markdown("""
     **BART** (Bidirectional and Auto-Regressive Transformer) reads your full text and writes a shorter summary.
     It was fine-tuned on CNN/Daily Mail news articles.
