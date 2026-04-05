@@ -28,27 +28,26 @@ from utils import (
 # ── Page Config ───────────────────────────────────────────────
 st.set_page_config(
     page_title="Transformer NLP Apps",
-    page_icon="🤖",
     layout="wide"
 )
 
-st.title("🤖 Transformer-Based NLP Apps")
+st.title("Transformer-Based NLP Apps")
 st.markdown("**Text Summarization** with BART and **Language Translation** with NLLB — powered by HuggingFace Transformers.")
 
 # ── Sidebar ───────────────────────────────────────────────────
-st.sidebar.title("📂 Navigation")
+st.sidebar.title("Navigation")
 section = st.sidebar.radio("Choose an app:", [
-    "📖 How Transformers Work",
-    "📝 Text Summarization (BART)",
-    "🌍 Language Translation (NLLB)",
-    "📊 BLEU Score Evaluator",
+    "How Transformers Work",
+    "Text Summarization (BART)",
+    "Language Translation (NLLB)",
+    "BLEU Score Evaluator",
 ])
 
 # ════════════════════════════════════════════════════════════
-# SECTION 1 — How Transformers Work
+# SECTION 1 - How Transformers Work
 # ════════════════════════════════════════════════════════════
-if section == "📖 How Transformers Work":
-    st.header("📖 How Transformers Work")
+if section == "How Transformers Work":
+    st.header("How Transformers Work")
 
     st.markdown("""
     ### What is a Transformer?
@@ -57,7 +56,7 @@ if section == "📖 How Transformers Work":
     and figure out which ones matter most for understanding each other.
     """)
 
-    st.subheader("🔵 Self-Attention — The Key Idea")
+    st.subheader("Self-Attention - The Key Idea")
     st.markdown("""
     **Self-Attention** lets the model figure out which words relate to each other in a sentence.
 
@@ -87,7 +86,7 @@ if section == "📖 How Transformers Work":
 
     st.divider()
 
-    st.subheader("🔄 Encoder-Decoder Architecture")
+    st.subheader("Encoder-Decoder Architecture")
     st.markdown("""
     Most translation and summarization models use an **Encoder-Decoder** structure:
     - **Encoder** = reads and understands the input text
@@ -107,7 +106,7 @@ if section == "📖 How Transformers Work":
 
     st.divider()
 
-    st.subheader("🧠 Models Used in This App")
+    st.subheader("Models Used in This App")
     st.markdown("""
     | Model | Made By | Used For | How it works |
     |---|---|---|---|
@@ -119,21 +118,21 @@ if section == "📖 How Transformers Work":
 
     | Score | Quality |
     |---|---|
-    | 0–20 | ❌ Poor |
-    | 20–40 | ⚠️ Understandable |
-    | 40–60 | 👍 Good |
-    | 60–80 | ✅ Very High |
-    | 80–100 | 🏆 Near-Perfect |
+    | 0–20 | Poor |
+    | 20–40 | Understandable |
+    | 40–60 | Good |
+    | 60–80 | Very High |
+    | 80–100 | Near-Perfect |
     """)
 
     fig = plot_bleu_interpretation_table()
     st.pyplot(fig)
 
 # ════════════════════════════════════════════════════════════
-# SECTION 2 — Text Summarization
+# SECTION 2 - Text Summarization
 # ════════════════════════════════════════════════════════════
-elif section == "📝 Text Summarization (BART)":
-    st.header("📝 Text Summarization — BART Model")
+elif section == "Text Summarization (BART)":
+    st.header("Text Summarization - BART Model")
     st.markdown("""
     **BART** (Bidirectional and Auto-Regressive Transformer) reads your full text and writes a shorter summary.
     It was fine-tuned on CNN/Daily Mail news articles.
@@ -146,9 +145,9 @@ elif section == "📝 Text Summarization (BART)":
     question answering. This particular checkpoint has been fine-tuned on CNN Daily Mail, a large collection of
     text-summary pairs. The model can handle long documents and produces concise, coherent summaries."""
 
-    user_text = st.text_area("✏️ Enter text to summarize:", value=default_text, height=180)
+    user_text = st.text_area("Enter text to summarize:", value=default_text, height=180)
 
-    st.sidebar.subheader("⚙️ Summary Settings")
+    st.sidebar.subheader("Summary Settings")
     min_len = st.sidebar.slider("Min summary length (tokens)", 10, 50, 20)
     max_len = st.sidebar.slider("Max summary length (tokens)", 50, 300, 100)
     rep_penalty = st.sidebar.slider("Repetition Penalty", 1.0, 10.0, 5.0, step=0.5,
@@ -156,11 +155,11 @@ elif section == "📝 Text Summarization (BART)":
     len_penalty = st.sidebar.slider("Length Penalty", 0.1, 2.0, 0.3, step=0.1,
         help="Lower = longer summaries, Higher = shorter summaries")
 
-    if st.button("🚀 Summarize"):
+    if st.button("Summarize"):
         if not user_text.strip():
             st.warning("Please enter some text!")
         else:
-            with st.spinner("Loading BART model and summarizing... (first run may take ~1 min to download) ⏳"):
+            with st.spinner("Loading BART model and summarizing... (first run may take ~1 min to download)"):
                 try:
                     tokenizer, model = load_summarizer()
                     summary = summarize_text(
@@ -169,30 +168,30 @@ elif section == "📝 Text Summarization (BART)":
                         repetition_penalty=rep_penalty, length_penalty=len_penalty
                     )
 
-                    st.success("✅ Summary generated!")
+                    st.success("Summary generated!")
 
                     col1, col2 = st.columns(2)
-                    col1.subheader("📄 Original Text")
+                    col1.subheader("Original Text")
                     col1.write(user_text)
 
-                    col2.subheader("✂️ Summary")
+                    col2.subheader("Summary")
                     col2.info(summary)
 
-                    st.subheader("📊 Compression Stats")
+                    st.subheader("Compression Stats")
                     fig, reduction = plot_summary_length_comparison(user_text, summary)
                     st.pyplot(fig)
                     st.metric("Text Reduction", f"{reduction}%",
                               help="How much shorter the summary is compared to the original")
 
                 except Exception as e:
-                    st.error(f"❌ Summarization failed: {e}")
-                    st.info("💡 Tip: Make sure `transformers` and `torch` are installed.")
+                    st.error(f"Summarization failed: {e}")
+                    st.info("Tip: Make sure `transformers` and `torch` are installed.")
 
 # ════════════════════════════════════════════════════════════
-# SECTION 3 — Language Translation
+# SECTION 3 - Language Translation
 # ════════════════════════════════════════════════════════════
-elif section == "🌍 Language Translation (NLLB)":
-    st.header("🌍 Language Translation — Facebook NLLB-200")
+elif section == "Language Translation (NLLB)":
+    st.header("Language Translation — Facebook NLLB-200")
     st.markdown("""
     **NLLB-200** (No Language Left Behind) translates between **200 languages**.
     Built by Meta/Facebook AI.
@@ -205,9 +204,9 @@ elif section == "🌍 Language Translation (NLLB)":
     src_lang = LANGUAGE_CODES[src_lang_name]
     tgt_lang = LANGUAGE_CODES[tgt_lang_name]
 
-    user_text = st.text_area("✏️ Text to translate:", value="Bonjour, comment allez-vous ?", height=100)
+    user_text = st.text_area("Text to translate:", value="Bonjour, comment allez-vous ?", height=100)
 
-    if st.button("🌍 Translate"):
+    if st.button("Translate"):
         if not user_text.strip():
             st.warning("Please enter some text!")
         elif src_lang == tgt_lang:
@@ -218,22 +217,22 @@ elif section == "🌍 Language Translation (NLLB)":
                     translator = load_translator()
                     translation = translate_text(translator, user_text, src_lang, tgt_lang)
 
-                    st.success("✅ Translation complete!")
+                    st.success("Translation complete!")
 
                     col1, col2 = st.columns(2)
-                    col1.subheader(f"📝 {src_lang_name}")
+                    col1.subheader(f"{src_lang_name}")
                     col1.info(user_text)
-                    col2.subheader(f"🌍 {tgt_lang_name}")
+                    col2.subheader(f"{tgt_lang_name}")
                     col2.success(translation)
 
                 except Exception as e:
-                    st.error(f"❌ Translation failed: {e}")
+                    st.error(f"Translation failed: {e}")
 
 # ════════════════════════════════════════════════════════════
-# SECTION 4 — BLEU Score Evaluator
+# SECTION 4 - BLEU Score Evaluator
 # ════════════════════════════════════════════════════════════
-elif section == "📊 BLEU Score Evaluator":
-    st.header("📊 BLEU Score Evaluator")
+elif section == "BLEU Score Evaluator":
+    st.header("BLEU Score Evaluator")
     st.markdown("""
     **BLEU (Bilingual Evaluation Understudy)** measures translation quality
     by comparing model output to human reference translations. Score: 0–100.
@@ -265,8 +264,8 @@ elif section == "📊 BLEU Score Evaluator":
     src_lang = st.selectbox("Source Language", list(LANGUAGE_CODES.keys()), index=0)
     tgt_lang = st.selectbox("Target Language", list(LANGUAGE_CODES.keys()), index=11)
 
-    if st.button("🔍 Translate & Evaluate BLEU"):
-        with st.spinner("Loading NLLB model, translating, and scoring... ⏳"):
+    if st.button("Translate & Evaluate BLEU"):
+        with st.spinner("Loading NLLB model, translating, and scoring..."):
             try:
                 translator = load_translator()
                 predictions = translate_batch(
@@ -278,10 +277,10 @@ elif section == "📊 BLEU Score Evaluator":
                 bleu_score = calculate_bleu(predictions, references)
                 interpretation = interpret_bleu(bleu_score)
 
-                st.success(f"✅ Evaluation complete!")
+                st.success(f"Evaluation complete!")
 
                 # BLEU Score display
-                st.subheader("🎯 Overall BLEU Score")
+                st.subheader("Overall BLEU Score")
                 col1, col2 = st.columns(2)
                 col1.metric("BLEU Score", f"{bleu_score} / 100")
                 col2.metric("Quality", interpretation)
@@ -290,34 +289,34 @@ elif section == "📊 BLEU Score Evaluator":
                 st.pyplot(fig)
 
                 # Per-sentence results
-                st.subheader("📋 Sentence-by-Sentence Results")
+                st.subheader("Sentence-by-Sentence Results")
                 for i, (sample, pred) in enumerate(zip(edited_samples, predictions)):
                     with st.expander(f"Sentence {i+1}"):
                         st.write(f"**Source:** {sample['src']}")
                         st.write(f"**Reference (human):** {sample['ref']}")
                         st.write(f"**Predicted (model):** {pred}")
-                        match = "✅ Good match" if pred.lower().strip() == sample['ref'].lower().strip() else "📊 Partial match"
+                        match = "Good match" if pred.lower().strip() == sample['ref'].lower().strip() else "Partial match"
                         st.caption(match)
 
                 fig2 = plot_translation_results(edited_samples, predictions)
                 st.pyplot(fig2)
 
                 # Interpretation guide
-                st.subheader("📖 BLEU Score Reference")
+                st.subheader("BLEU Score Reference")
                 st.markdown("""
                 | Score | Interpretation |
                 |---|---|
-                | 90–100 | 🏆 Perfect / Near-human |
-                | 60–80 | ✅ Very high quality |
-                | 40–60 | 👍 Good quality |
-                | 20–40 | ⚠️ Understandable |
-                | 0–20 | ❌ Poor translation |
+                | 90–100 | Perfect / Near-human |
+                | 60–80 | Very high quality |
+                | 40–60 | Good quality |
+                | 20–40 | Understandable |
+                | 0–20 | Poor translation |
                 """)
 
             except Exception as e:
-                st.error(f"❌ Evaluation failed: {e}")
+                st.error(f"Evaluation failed: {e}")
 
 # ── Footer ────────────────────────────────────────────────────
 st.sidebar.markdown("---")
-st.sidebar.markdown("**CST2216 — Individual Term Project**")
+st.sidebar.markdown("**Project**")
 st.sidebar.markdown("Text Summarization + Translation with Transformers")
