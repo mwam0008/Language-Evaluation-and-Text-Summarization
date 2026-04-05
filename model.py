@@ -136,12 +136,12 @@ def calculate_bleu(predictions: list, references: list) -> float:
 def interpret_bleu(score: float) -> str:
     """Return a human-readable interpretation of a BLEU score."""
     if score >= 90:
-        return "🏆 Perfect / Near-human quality"
+        return "Perfect / Near-human quality"
     elif score >= 60:
-        return "✅ Very high quality — fluent and accurate"
+        return "Very high quality - fluent and accurate"
     elif score >= 40:
-        return "👍 Good quality — some fluency issues"
+        return "Good quality - some fluency issues"
     elif score >= 20:
-        return "⚠️ Understandable but not fluent"
+        return "Understandable but not fluent"
     else:
-        return "❌ Poor translation — broken or nonsensical"
+        return "Poor translation - broken or nonsensical"
