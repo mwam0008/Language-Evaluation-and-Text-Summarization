@@ -68,7 +68,7 @@ if section == "How Transformers Work":
 
     col1, col2 = st.columns([1, 2])
     with col1:
-        st.image("/mnt/user-data/uploads/Self_Attention.jpg",
+        st.image("Self_Attention.jpg",
                  caption="Self-Attention: 'it' attends to 'animal' and 'street'", use_column_width=True)
     with col2:
         st.markdown("""
@@ -95,13 +95,13 @@ if section == "How Transformers Work":
 
     col1, col2, col3 = st.columns(3)
     with col1:
-        st.image("/mnt/user-data/uploads/ED1.jpg", caption="Simple: input → output", use_column_width=True)
+        st.image("ED1.jpg", caption="Simple: input → output", use_column_width=True)
     with col2:
-        st.image("/mnt/user-data/uploads/ED2.jpg", caption="Encoder-Decoder translates step by step", use_column_width=True)
+        st.image("ED2.jpg", caption="Encoder-Decoder translates step by step", use_column_width=True)
     with col3:
-        st.image("/mnt/user-data/uploads/ED3.jpg", caption="Attention network powers it", use_column_width=True)
+        st.image("ED3.jpg", caption="Attention network powers it", use_column_width=True)
 
-    st.image("/mnt/user-data/uploads/ED4.jpg",
+    st.image("ED4.jpg",
              caption="Full picture: Attention mechanism inside the Encoder-Decoder", use_column_width=True)
 
     st.divider()
