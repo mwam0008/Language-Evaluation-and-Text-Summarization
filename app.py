@@ -39,7 +39,7 @@ st.sidebar.title("Navigation")
 section = st.sidebar.radio("Choose an app:", [
     "How Transformers Work",
     "Text Summarization",
-    "Language Translation (NLLB)",
+    "Language Translation",
     "BLEU Score Evaluator",
 ])
 
@@ -159,7 +159,7 @@ elif section == "Text Summarization":
         if not user_text.strip():
             st.warning("Please enter some text!")
         else:
-            with st.spinner("Loading BART model and summarizing... (first run may take ~1 min to download)"):
+            with st.spinner("Loading summarization... (first run may take ~1 min to download)"):
                 try:
                     tokenizer, model = load_summarizer()
                     summary = summarize_text(
@@ -190,8 +190,8 @@ elif section == "Text Summarization":
 # ════════════════════════════════════════════════════════════
 # SECTION 3 - Language Translation
 # ════════════════════════════════════════════════════════════
-elif section == "Language Translation (NLLB)":
-    st.header("Language Translation — Facebook NLLB-200")
+elif section == "Language Translation":
+    st.header("Language Translation")
     st.markdown("""
     **NLLB-200** (No Language Left Behind) translates between **200 languages**.
     Built by Meta/Facebook AI.
@@ -212,7 +212,7 @@ elif section == "Language Translation (NLLB)":
         elif src_lang == tgt_lang:
             st.warning("Source and target languages must be different!")
         else:
-            with st.spinner("Loading NLLB model and translating... (first run may take ~2 min to download)"):
+            with st.spinner("Loading translation... (first run may take ~2 min to download)"):
                 try:
                     translator = load_translator()
                     translation = translate_text(translator, user_text, src_lang, tgt_lang)
